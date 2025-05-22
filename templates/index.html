@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suprnews RSS Reader - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-white w-64 min-h-screen shadow-lg fixed">
+            <div class="p-5">
+                <h1 class="text-2xl font-bold mb-6">Suprnews</h1>
+                <nav>
+                    <ul>
+                        <li class="mb-2">
+                            <a href="/" class="flex items-center p-2 rounded-md hover:bg-blue-50 {{if eq .Active "home"}}bg-blue-100 text-blue-700{{else}}text-gray-700{{end}}">
+                                <i class="fas fa-home w-6"></i>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/feeds" class="flex items-center p-2 rounded-md hover:bg-blue-50 {{if eq .Active "feeds"}}bg-blue-100 text-blue-700{{else}}text-gray-700{{end}}">
+                                <i class="fas fa-rss w-6"></i>
+                                <span>Feeds</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <!-- Profile section with logout -->
+                <div class="mt-auto pt-6 border-t border-gray-200 mt-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-user-circle text-2xl text-gray-400 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-700">Profile</span>
+                        </div>
+                        <form method="POST" action="/logout">
+                            <button type="submit" class="text-sm text-red-600 hover:text-red-800">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-64">
+            <!-- New Topics Navigation Bar -->
+            <div class="w-full bg-white shadow-md sticky top-0 z-10 mb-6">
+                <div class="container mx-auto px-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex overflow-x-auto hide-scrollbar py-4 space-x-6 font-medium text-sm">
+                            <a href="/" class="whitespace-nowrap text-gray-900 hover:text-blue-600 {{if eq .Query ""}}border-b-2 border-blue-600{{end}}">
+                                All News
+                            </a>
+                            <a href="/?category=politics" class="whitespace-nowrap text-gray-900 hover:text-blue-600 {{if eq .Query "politics"}}border-b-2 border-blue-600{{end}}">
+                                Politics
+                            </a>
+                            <a href="/?category=technology" class="whitespace-nowrap text-gray-900 hover:text-blue-600 {{if eq .Query "technology"}}border-b-2 border-blue-600{{end}}">
+                                Technology
+                            </a>
+                            <a href="/?category=business" class="whitespace-nowrap text-gray-900 hover:text-blue-600 {{if eq .Query "business"}}border-b-2 border-blue-600{{end}}">
+                                Business
+                            </a>
+                            <a href="/?category=sports" class="whitespace-nowrap text-gray-900 hover:text-blue-600 {{if eq .Query "sports"}}border-b-2 border-blue-600{{end}}">
+                                Sports
+                            </a>
+                            <a href="/?category=entertainment" class="whitespace-nowrap text-gray-900 hover:text-blue-600 {{if eq .Query "entertainment"}}border-b-2 border-blue-600{{end}}">
+                                Entertainment
+                            </a>
+                            <a href="/?category=health" class="whitespace-nowrap text-gray-900 hover:text-blue-600 {{if eq .Query "health"}}border-b-2 border-blue-600{{end}}">
+                                Health
+                            </a>
+                            <a href="/?category=science" class="whitespace-nowrap text-gray-900 hover:text-blue-600 {{if eq .Query "science"}}border-b-2 border-blue-600{{end}}">
+                                Science
+                            </a>
+                        </div>
+                        
+                        <!-- Search form -->
+                        <form action="/search" method="get" class="relative hidden md:block">
+                            <input type="text" name="q" placeholder="Search articles..." 
+                                   class="px-4 py-2 rounded-full text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button type="submit" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container mx-auto px-6 py-8">
+                <div class="mb-12">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight">Latest</h2>
+                        <form method="GET" action="/" class="flex items-center space-x-2">
+                            <label for="feed" class="text-sm font-medium text-gray-700">Filter by Feed:</label>
+                            <select name="feed" id="feed" class="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">All Feeds</option>
+                                {{range .Feeds}}
+                                <option value="{{.ID}}" {{if eq (printf "%d" .ID) $.Query}}selected{{end}}>{{.Name}}</option>
+                                {{end}}
+                            </select>
+                            <button type="submit" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Apply</button>
+                        </form>
+                    </div>
+
+                    {{if gt (len .Articles) 0}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {{range .Articles}}
+                        <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:scale-105 border-2 border-transparent hover:border-gradient">
+                            {{if .ImageURL}}
+                            <img src="{{.ImageURL}}" alt="Article Image" class="w-full h-48 object-cover">
+                            {{end}}
+                            <div class="p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-3 leading-tight">
+                                    <a href="/article/{{.ID}}" class="hover:text-blue-500 transition-colors duration-300">{{.Title}}</a>
+                                </h3>
+                                <p class="text-gray-600 mb-4 line-clamp-2 text-sm leading-relaxed">
+                                    {{if .Summary}}
+                                        {{if ge (len .Summary) 120}}
+                                            {{slice .Summary 0 120}}...
+                                        {{else}}
+                                            {{.Summary}}
+                                        {{end}}
+                                    {{else}}
+                                        No summary available
+                                    {{end}}
+                                </p>
+                                <div class="flex justify-between text-xs text-gray-500 mb-4">
+                                    <span class="truncate">{{.FeedName}}</span>
+                                    <span>{{.PublishedAt.Format "2006-01-02"}}</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="badge badge-category">{{.Category}}</span>
+                                    <span class="badge badge-sentiment">{{.Sentiment}}</span>
+                                    <span class="badge badge-bias">{{.Bias}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
+                    </div>
+                    {{else}}
+                    <div class="text-center py-16 bg-white rounded-2xl shadow-lg">
+                        <p class="text-gray-600 text-lg mb-4">No articles yet. Add some RSS feeds to get started!</p>
+                        <a href="/feeds" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-colors duration-300">Add Feeds</a>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSS to hide scrollbars but keep functionality -->
+    <style>
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    </style>
+</body>
+</html>
+{{define "content"}}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {{range .Articles}}
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <img src="{{.ImageURL}}" alt="Article Image" class="w-full h-48 object-cover">
+        <div class="p-4">
+            <h2 class="text-lg font-bold">
+                <a href="/article/{{.ID}}" class="text-blue-500 hover:underline">{{.Title}}</a>
+            </h2>
+            <p class="text-gray-600 text-sm mt-2">{{.Summary}}</p>
+        </div>
+    </div>
+    {{end}}
+</div>
+{{end}}

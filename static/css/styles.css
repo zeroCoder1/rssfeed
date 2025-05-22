@@ -1,0 +1,136 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+input {
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+button {
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2563eb; /* Tailwind's blue-700 */
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.badge-category {
+    background-color: #dbeafe; /* blue-100 */
+    color: #1e40af; /* blue-800 */
+}
+
+.badge-sentiment {
+    background-color: #ecfdf5; /* green-100 */
+    color: #065f46; /* green-800 */
+}
+
+.badge-bias {
+    background-color: #fef3c7; /* yellow-100 */
+    color: #92400e; /* yellow-800 */
+}
+
+/* Sidebar Styles */
+#sidebar {
+    z-index: 50;
+}
+
+@media (max-width: 767px) {
+    #sidebar {
+        width: 250px;
+    }
+}
+
+/* Gradient Border */
+.border-gradient {
+    border-image: linear-gradient(to right, #3b82f6, #93c5fd) 1;
+}
+
+/* Debugging styles for the login link */
+a[href="/login"] {
+    outline: 2px solid red; /* Highlight the link for debugging */
+}
+
+/* Article content styling */
+.prose {
+    color: #333;
+    line-height: 1.6;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+    font-weight: 600;
+}
+
+.prose p {
+    margin-bottom: 1.25em;
+}
+
+.prose a {
+    color: #2563eb; /* blue-600 */
+    text-decoration: none;
+}
+
+.prose a:hover {
+    text-decoration: underline;
+}
+
+.prose img {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5em 0;
+}
+
+/* Error message styling */
+.error-message {
+    padding: 1rem;
+    background-color: #fee2e2; /* red-100 */
+    border-left: 4px solid #ef4444; /* red-500 */
+    border-radius: 0.25rem;
+    margin: 1rem 0;
+}
+
+.error-message p {
+    margin-bottom: 0.5rem;
+    color: #7f1d1d; /* red-900 */
+}
+
+/* YouTube embed styling */
+.youtube-embed {
+    margin: 2rem 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.youtube-embed iframe {
+    border: none;
+}
+
+/* Optional: Style the link that generated the embed */
+.youtube-processed {
+    font-weight: 600;
+    color: #b91c1c !important; /* red-700 */
+}

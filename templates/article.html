@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Article.Title}} - Suprnews</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-white w-64 min-h-screen shadow-lg fixed">
+            <div class="p-5">
+                <h1 class="text-2xl font-bold mb-6">Suprnews</h1>
+                <nav>
+                    <ul>
+                        <li class="mb-2">
+                            <a href="/" class="flex items-center p-2 rounded-md hover:bg-blue-50 {{if eq .Active "home"}}bg-blue-100 text-blue-700{{else}}text-gray-700{{end}}">
+                                <i class="fas fa-home w-6"></i>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/feeds" class="flex items-center p-2 rounded-md hover:bg-blue-50 {{if eq .Active "feeds"}}bg-blue-100 text-blue-700{{else}}text-gray-700{{end}}">
+                                <i class="fas fa-rss w-6"></i>
+                                <span>Feeds</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 ml-64">
+            <div class="container mx-auto px-6 py-8">
+                <a href="/" class="inline-flex items-center mb-6 text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    <span>Back to articles</span>
+                </a>
+
+                <article class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    {{if .Article.ImageURL}}
+                    <div class="w-full h-72 bg-gray-200">
+                        <img src="{{.Article.ImageURL}}" alt="Article image" class="w-full h-full object-cover">
+                    </div>
+                    {{end}}
+                    <div class="p-8">
+                        <div class="flex items-center space-x-2 mb-4">
+                            <span class="badge badge-category">{{.Article.Category}}</span>
+                            <span class="badge badge-sentiment">{{.Article.Sentiment}}</span>
+                            <span class="badge badge-bias">{{.Article.Bias}}</span>
+                        </div>
+
+                        <h1 class="text-3xl font-bold mb-4">{{.Article.Title}}</h1>
+
+                        <div class="flex items-center space-x-3 text-gray-500 text-sm mb-8">
+                            <span>{{.Article.FeedName}}</span>
+                            <span>•</span>
+                            <span>{{.Article.PublishedAt.Format "Jan 2, 2006"}}</span>
+                            <span>•</span>
+                            <a href="{{.Article.URL}}" target="_blank" class="text-blue-600 hover:underline">Original article</a>
+                        </div>
+
+                        <div class="prose max-w-none">
+                            {{.Article.Summary | safeHTML}}
+                        </div>
+
+                        <script>
+                            // Add target="_blank" and styling to all links in article content
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const articleLinks = document.querySelectorAll('.prose a');
+                                articleLinks.forEach(link => {
+                                    // Set target to open in new tab
+                                    link.setAttribute('target', '_blank');
+                                    // Add styling if not already present
+                                    if (!link.classList.contains('text-blue-600')) {
+                                        link.classList.add('text-blue-600', 'hover:underline');
+                                    }
+                                    // Add rel attribute for security
+                                    link.setAttribute('rel', 'noopener noreferrer');
+                                    
+                                    // Convert YouTube links to embeds
+                                    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                                    const match = link.href.match(youtubeRegex);
+                                    if (match && match[1]) {
+                                        const videoId = match[1];
+                                        // Create embed container
+                                        const embedContainer = document.createElement('div');
+                                        embedContainer.className = 'youtube-embed my-6';
+                                        // Create responsive wrapper
+                                        const responsiveWrapper = document.createElement('div');
+                                        responsiveWrapper.className = 'relative pb-[56.25%] h-0 overflow-hidden max-w-full';
+                                        embedContainer.appendChild(responsiveWrapper);
+                                        // Create iframe
+                                        const iframe = document.createElement('iframe');
+                                        iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                                        iframe.className = 'absolute top-0 left-0 w-full h-full border-0';
+                                        iframe.setAttribute('allowfullscreen', '');
+                                        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                                        responsiveWrapper.appendChild(iframe);
+                                        
+                                        // Insert embed after the link
+                                        link.parentNode.insertBefore(embedContainer, link.nextSibling);
+                                        
+                                        // Optional: Add a class to the link to mark it as processed
+                                        link.classList.add('youtube-processed');
+                                    }
+                                });
+                            });
+                        </script>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
