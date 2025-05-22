@@ -19,8 +19,8 @@ RUN go mod download
 # Copy the source code
 COPY . .
 
-# Build the application with CGO enabled for ARM64
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -o suprnews
+# Build the application with CGO enabled for native architecture
+RUN CGO_ENABLED=1 go build -o suprnews
 
 # Use a newer base image for runtime with ARM64 support
 FROM ubuntu:22.04
