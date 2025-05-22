@@ -1,5 +1,7 @@
 # Suprnews - RSS Reader
 
+play [here](https://rssfeed-production.up.railway.app/)
+
 A modern RSS reader with automatic categorization and content extraction.
 
 ## Deployment Instructions
