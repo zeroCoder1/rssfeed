@@ -56,3 +56,6 @@ Or simply run:
 
 The application data is stored in a Docker volume named `suprnews_data`. This ensures that your database and settings are preserved across container restarts and updates.
 <!-- GitAds-Verify: DX7YCSWVOEKYBWZYD66KU1XK6HE84ED4 -->
+## GitAds Sponsored
+[![Sponsored by GitAds](https://gitads.dev/v1/ad-serve?source=zerocoder1/rssfeed@github)](https://gitads.dev/v1/ad-track?source=zerocoder1/rssfeed@github)
+
