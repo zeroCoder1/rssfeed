@@ -55,3 +55,4 @@ Or simply run:
 ## Data Persistence
 
 The application data is stored in a Docker volume named `suprnews_data`. This ensures that your database and settings are preserved across container restarts and updates.
+<!-- GitAds-Verify: DX7YCSWVOEKYBWZYD66KU1XK6HE84ED4 -->
